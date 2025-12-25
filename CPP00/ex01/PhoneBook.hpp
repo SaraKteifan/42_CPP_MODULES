@@ -9,10 +9,12 @@ class	PhoneBook
 {
 	private:
 		Contact	contacts[MAX_CONTACTS];
+		int		next_index;
 
 	public:
 		PhoneBook();
-
+		void	add_contact();
+		void	search_contact();
 };
 
 #endif

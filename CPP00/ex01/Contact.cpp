@@ -38,3 +38,28 @@ std::string	Contact::getDarkestSecret()
 {
 	return (this->darkestSecret);
 }
+
+void	Contact::setFirstName(std::string first_name)
+{
+	this->firstName = first_name;
+}
+
+void	Contact::setLastName(std::string last_name)
+{
+	this->lastName = last_name;
+}
+
+void	Contact::setNickName(std::string nick_name)
+{
+	this->nickName = nick_name;
+}
+
+void	Contact::setPhoneNumber(std::string phone_number)
+{
+	this->phoneNumber = phone_number;
+}
+
+void	Contact::setDarkestSecret(std::string darkest_secret)
+{
+	this->darkestSecret = darkest_secret;
+}
