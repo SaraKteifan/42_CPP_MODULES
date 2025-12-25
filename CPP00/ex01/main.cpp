@@ -9,8 +9,7 @@ int	main()
 	while (1)
 	{
 		std::cout << "Enter a command \"ADD\", \"SEARCH\", or \"EXIT\": ";
-		if (!std::getline(std::cin, command))
-			break;
+		std::getline(std::cin, command);
 		if (command == "ADD")
 		{
 			phoneBook.add_contact();

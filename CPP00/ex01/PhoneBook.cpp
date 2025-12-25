@@ -1,5 +1,6 @@
 #include "PhoneBook.hpp"
 #include <iostream>
+#include <sstream>
 
 
 PhoneBook::PhoneBook()
@@ -37,12 +38,12 @@ static std::string	get_valid_name(std::string field)
 		std::getline(std::cin, name);
 		if (name.empty())
 		{
-			std::cout << "!! " << field << "field cannot be empty." << std::endl;
+			std::cout << "\033[31m!!\033[0m " << field << " cannot be empty." << std::endl;
 			continue;
 		}
 		if (is_only_spaces(name))
 		{
-			std::cout << "!! " << field << "field cannot contain spaces only." << std::endl;
+			std::cout << "\033[31m!!\033[0m " << field << " cannot contain spaces only." << std::endl;
 			continue;
 		}
 		return (name);
@@ -59,17 +60,22 @@ static std::string	get_valid_phone_number()
 		std::getline(std::cin, phone_number);
 		if (phone_number.empty())
 		{
-			std::cout << "!! " << "Phone Number: field cannot be empty." << std::endl;
+			std::cout << "\033[31m!!\033[0m " << "Phone Number: cannot be empty." << std::endl;
 			continue;
 		}
 		if (is_only_spaces(phone_number))
 		{
-			std::cout << "!! " << "Phone Number: field cannot contain spaces only." << std::endl;
+			std::cout << "\033[31m!!\033[0m " << "Phone Number: cannot contain spaces only." << std::endl;
 			continue;
 		}
 		if (!is_only_digits(phone_number))
 		{
-			std::cout << "!! " << "Phone Number: field can contain digits only." << std::endl;
+			std::cout << "\033[31m!!\033[0m " << "Phone Number: can contain digits only." << std::endl;
+			continue;
+		}
+		if (!(phone_number.length() >= 8 && phone_number.length() <= 12))
+		{
+			std::cout << "\033[31m!!\033[0m " << "Phone Number: must be between 8-12 digits." << std::endl;
 			continue;
 		}
 		return (phone_number);
@@ -86,7 +92,7 @@ static std::string	get_valid_darkest_secret()
 		std::getline(std::cin, secret);
 		if (secret.empty())
 		{
-			std::cout << "!! " << "Darkest Secret: field cannot be empty." << std::endl;
+			std::cout << "\033[31m!!\033[0m " << "Darkest Secret: cannot be empty." << std::endl;
 			continue;
 		}
 		return (secret);
@@ -115,17 +121,102 @@ void	PhoneBook::add_contact()
 
 	// Circular index
 	this->next_index = (this->next_index + 1) % MAX_CONTACTS;
+}
 
+static void	display_col(std::string field)
+{
+	if (field.length() < 10)
+	{
+		for (size_t i = 0; i < (10 - field.length()); i++)
+			std::cout << ' ';
+		for (size_t j = 0; j < field.length(); j++)
+			std::cout << field[j];
+	}
+	else
+	{
+		for (size_t j = 0; j < 9; j++)
+			std::cout << field[j];
+		std::cout << ".";
+	}
+}
+
+static int get_valid_index()
+{
+	std::string	index;
+	int			i;
+
+	while (true)
+	{
+		std::cout << "Enter index of contact to display: ";
+		std::getline(std::cin, index);
+		if (index.empty())
+		{
+			std::cout << "\033[31m!!\033[0m " << "Index cannot be empty." << std::endl;
+			continue;
+		}
+		if (is_only_spaces(index))
+		{
+			std::cout << "\033[31m!!\033[0m " << "Index cannot be empty." << std::endl;
+			continue;
+		}
+		if (!is_only_digits(index))
+		{
+			std::cout << "\033[31m!!\033[0m " << "Invalid index." << std::endl;
+			continue;
+		}
+		std::stringstream ss(index);
+		ss >> i;
+		if (ss.fail() || !ss.eof())
+		{
+			std::cout << "\033[31m!!\033[0m " << "Invalid index." << std::endl;
+			continue;
+		}
+		return (i);
+	}
+}
+
+static void	display_contact(Contact contact)
+{
+	std::cout << "First Name:     " << contact.getFirstName() << std::endl;
+	std::cout << "Last Name:      " << contact.getLastName() << std::endl;
+	std::cout << "Nick Name:      " << contact.getNickName() << std::endl;
+	std::cout << "Phone Number:   " << contact.getPhoneNumber() << std::endl;
+	std::cout << "Darkest Secret: " << contact.getDarkestSecret() << std::endl;
 }
 
 void	PhoneBook::search_contact()
 {
-	std::cout << "index | first name | last name | nickname" << std::endl;
+	int	index;
+
+	std::cout << "     index|first name| last name| nick name" << std::endl;
 	for (int i = 0; i < MAX_CONTACTS; i++)
 	{
 		if (contacts[i].getFirstName().empty())
 			break;
-		std::cout << i + 1 << " | " << contacts[i].getFirstName() << " | " << contacts[i].getLastName()
-			<< " | " << contacts[i].getNickName() << std::endl;
+		std::cout << "         " << i + 1;
+		std::cout << "|";
+		display_col(contacts[i].getFirstName());
+		std::cout << "|";
+		display_col(contacts[i].getLastName());
+		std::cout << "|";
+		display_col(contacts[i].getNickName());
+		std::cout << std::endl;
+	}
+
+	while (true)
+	{
+		index = get_valid_index();
+		if (index < 1 || index > 8)
+		{
+			std::cout << "\033[31m!!\033[0m " << "index out of range." << std::endl;
+			continue;
+		}
+		if (contacts[index - 1].getFirstName().empty())
+		{
+			std::cout << "\033[31m!!\033[0m " << "Contact is empty." << std::endl;
+			continue;
+		}
+		display_contact(contacts[index - 1]);
+		break;
 	}
 }
