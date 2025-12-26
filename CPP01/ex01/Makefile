@@ -2,7 +2,7 @@ NAME      = zombie
 CXX       = c++
 CXXFLAGS  = -Wall -Wextra -Werror -std=c++98
 
-SRC_FILES = main Zombie newZombie randomChump
+SRC_FILES = main Zombie zombieHorde
 SRC       = $(SRC_FILES:=.cpp)
 OBJ       = $(SRC_FILES:=.o)
 
