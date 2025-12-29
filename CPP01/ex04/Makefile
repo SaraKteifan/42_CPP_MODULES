@@ -13,13 +13,13 @@ $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJ)
 
 $(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)
 
 $(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR)
 
 fclean: clean
 	@rm -f $(NAME)
