@@ -125,7 +125,7 @@ void	PhoneBook::add_contact()
 
 static void	display_col(std::string field)
 {
-	if (field.length() < 10)
+	if (field.length() <= 10)
 	{
 		for (size_t i = 0; i < (10 - field.length()); i++)
 			std::cout << ' ';
@@ -205,6 +205,8 @@ void	PhoneBook::search_contact()
 
 	while (true)
 	{
+		if (contacts[0].getFirstName().empty())
+			return;
 		index = get_valid_index();
 		if (index < 1 || index > 8)
 		{
