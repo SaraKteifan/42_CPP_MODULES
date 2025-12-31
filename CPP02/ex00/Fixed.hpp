@@ -5,11 +5,11 @@ class Fixed
 {
 	private:
 		int					value;
-		static const int	bits_num;
+		static const int	fractional_bits;
 	public:
 		Fixed();
-		Fixed(/* arg */);
-		/* More constructors*/
+		Fixed(const Fixed& other);
+		Fixed&	operator=(const Fixed& other);
 		~Fixed();
 		int	getRawBits( void ) const;
 		void setRawBits( int const raw );
