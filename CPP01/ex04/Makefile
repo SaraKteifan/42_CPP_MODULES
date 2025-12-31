@@ -2,7 +2,7 @@ NAME      = sed
 CXX       = c++
 CXXFLAGS  = -Wall -Wextra -Werror -std=c++98
 
-SRC_FILES = main
+SRC_FILES = main Sed
 BUILD_DIR = build
 SRC       = $(SRC_FILES:=.cpp)
 OBJ       = $(addprefix $(BUILD_DIR)/, $(SRC_FILES:=.o))
