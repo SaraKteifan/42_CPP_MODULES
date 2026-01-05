@@ -1,15 +1,16 @@
-#include "ClapTrap.hpp"
+#include "ScavTrap.hpp"
 
 int	main()
 {
-	ClapTrap clap_trap("Sara");
+	ScavTrap scav_trap("Sara");
 
-	clap_trap.attack("Enemy");
-	clap_trap.takeDamage(3);
-	clap_trap.beRepaired(5);
-	clap_trap.takeDamage(6);
-	clap_trap.takeDamage(9);
-	clap_trap.attack("Another enemy");
-	clap_trap.beRepaired(2);
+	scav_trap.attack("Enemy");
+	scav_trap.takeDamage(30);
+	scav_trap.beRepaired(50);
+	scav_trap.takeDamage(60);
+	scav_trap.guardGate();
+	scav_trap.takeDamage(90);
+	scav_trap.attack("Another enemy");
+	scav_trap.beRepaired(20);
 	return (0);
 }
