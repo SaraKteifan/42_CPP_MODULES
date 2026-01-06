@@ -2,7 +2,7 @@ NAME      = animal
 CXX       = c++
 CXXFLAGS  = -Wall -Wextra -Werror -std=c++98
 
-SRC_FILES = main Animal Dog Cat WrongAnimal WrongCat
+SRC_FILES = main Animal Dog Cat Brain
 BUILD_DIR = build
 SRC       = $(SRC_FILES:=.cpp)
 OBJ       = $(addprefix $(BUILD_DIR)/, $(SRC_FILES:=.o))
