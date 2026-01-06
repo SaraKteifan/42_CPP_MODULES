@@ -1,7 +1,7 @@
 #include "Animal.hpp"
 #include <iostream>
 
-Animal::Animal()
+Animal::Animal() : type("no_type")
 {
 	std::cout << "Animal default constructor called." << std::endl;
 }
@@ -30,7 +30,17 @@ Animal::~Animal()
 	std::cout << "Animal destructor called." << std::endl;
 }
 
-void	Animal::makeSound()
+std::string	Animal::getType() const
 {
-	std::cout << "Animal make sound." << std::endl;
+	return (this->type);
+}
+
+void	Animal::setType(const std::string& type)
+{
+	this->type = type;
+}
+
+void	Animal::makeSound() const
+{
+	std::cout << "Animal is UNKNOWN" << std::endl;
 }
