@@ -19,8 +19,10 @@ int main()
 	delete i;
 	std::cout << "========== Wrong Animal Tests ==========" << std::endl;
 	const WrongAnimal* k = new WrongCat();
+	WrongCat	l;
 	std::cout << k->getType() << " " << std::endl;
 	k->makeSound(); 
+	l.makeSound(); 
 	delete k;
 	return (0);
 }

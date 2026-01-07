@@ -1,4 +1,4 @@
-#ifndef WrongANIMAL_H
+#ifndef WRONGANIMAL_H
 # define WRONGANIMAL_H
 # include <string>
 
