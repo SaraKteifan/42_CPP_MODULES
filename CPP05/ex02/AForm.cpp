@@ -2,7 +2,7 @@
 #include "Bureaucrat.hpp"
 #include <iostream>
 
-AForm::AForm() : name("UNKNOWN"), is_signed(false), grade_to_sign(150), grade_to_execute(150)
+AForm::AForm() : name("UNKNOWN"), target("UNKNOWN"), is_signed(false), grade_to_sign(150), grade_to_execute(150)
 {
 }
 
@@ -67,9 +67,9 @@ void	AForm::execute(Bureaucrat const & executor) const
 	if (!this->is_signed)
 		throw FormNotSignedException();
 	else if (executor.getGrade() > this->grade_to_execute)
-		throw Bureaucrat::GradeTooLowException();
+		throw GradeTooLowException();
 	else
-		this->executeAction(executor);
+		this->executeAction();
 }
 
 std::ostream&	operator<<(std::ostream& os, const AForm& form)
