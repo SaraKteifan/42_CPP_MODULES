@@ -96,6 +96,11 @@ const char*	AForm::FormNotSignedException::what() const throw()
 	return ("form is not signed!");
 }
 
+const char*	AForm::GradeTooLowToExecuteException::what() const throw()
+{
+	return ("grade is too low to execute the form!");
+}
+
 int	AForm::check_grade(const int grade)
 {
 	if (grade < 1)

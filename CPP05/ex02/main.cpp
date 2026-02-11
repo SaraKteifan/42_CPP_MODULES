@@ -1,69 +1,41 @@
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
+#include "ShrubberyCreationForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "PresidentialPardonForm.hpp"
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 int	main()
 {
-	std::cout << "======= Valid Form Creation Tests =======" << std::endl;
+	srand(time(0));
+	std::cout << "======= Execution Tests =======" << std::endl;
 	try
 	{
-		Form f1;
-		std::cout << f1 << std::endl;
-		Form f2("ID renwal form", 50, 30);
-		std::cout << f2 << std::endl;
-		Form f3(f2);
-		std::cout << f3 << std::endl;
-		Form f4("ID creation form", 20, 5);
-		f4 = f1;
-		std::cout << f4 << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	std::cout << std::endl;
-
-	std::cout << "======= Invalid Form Creation Tests =======" << std::endl;
-	try
-	{
-		Form f1("ID creation form", 1, 0);
-		std::cout << f1 << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	try
-	{
-		Form f2("ID renwal form", 170, 150);
-		std::cout << f2 << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	std::cout << std::endl;
-	std::cout << "======= Successful signing Tests =======" << std::endl;
-	try
-	{
-		Form f1("ID renwal form", 50, 30);
-		Form f2("ID creation form", 20, 5);
-		Bureaucrat b1("Messi", 1);
-		Bureaucrat b2("Ronaldo", 50);
+		ShrubberyCreationForm f1("House garden");
+		RobotomyRequestForm f2("Washing dishes");
+		PresidentialPardonForm f3("Batman");
+		Bureaucrat b1("Messi", 5);
+		Bureaucrat b2("Ronaldo", 80);
+		std::cout << "------ Signing Forms ------" << std::endl;
 		b2.signForm(f1);
 		b1.signForm(f2);
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	std::cout << std::endl;
-	std::cout << "======= Failed signing Tests =======" << std::endl;
-	try
-	{
-		Form f1("ID creation form", 20, 5);
-		Bureaucrat b1("Ronaldo", 50);
-		b1.signForm(f1);
+		b1.signForm(f3);
+		std::cout << std::endl;
+		std::cout << "------ Bureaucrat Messi ------" << std::endl;
+		b1.executeForm(f1);
+		std::cout << "---" << std::endl;
+		b1.executeForm(f2);
+		std::cout << "---" << std::endl;
+		b1.executeForm(f3);
+		std::cout << std::endl;
+		std::cout << "------ Bureaucrat Ronaldo ------" << std::endl;
+		b2.executeForm(f1);
+		std::cout << "---" << std::endl;
+		b2.executeForm(f2);
+		std::cout << "---" << std::endl;
+		b2.executeForm(f3);
 	}
 	catch(const std::exception& e)
 	{
