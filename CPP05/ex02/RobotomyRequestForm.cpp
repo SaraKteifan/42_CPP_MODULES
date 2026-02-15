@@ -25,8 +25,9 @@ RobotomyRequestForm&	RobotomyRequestForm::operator=(const RobotomyRequestForm& o
 RobotomyRequestForm::~RobotomyRequestForm()
 {}
 
-void	RobotomyRequestForm::executeAction() const
+void	RobotomyRequestForm::execute(Bureaucrat const & executor) const
 {
+	checkExecAllowed(executor);
 	std::cout << "**ZZZZZZZZ**" << std::endl;
 	int random_num = rand() % 2;
 	if (random_num)
