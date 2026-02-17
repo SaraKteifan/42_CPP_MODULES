@@ -2,7 +2,7 @@ NAME      = a.out
 CXX       = c++
 CXXFLAGS  = -Wall -Wextra -Werror -std=c++98
 
-SRC_FILES = main Serializer
+SRC_FILES = main Base
 BUILD_DIR = build
 SRC       = $(SRC_FILES:=.cpp)
 OBJ       = $(addprefix $(BUILD_DIR)/, $(SRC_FILES:=.o))
