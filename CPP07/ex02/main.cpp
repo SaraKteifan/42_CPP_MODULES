@@ -6,13 +6,13 @@ int	main()
 {
 	Array<std::string> a;
 	Array<int> b(3);
-	b[0] = 1;
-	b[1] = 2;
-	b[2] = 3;
 
 	std::cout << "======= Valid Test =======" << std::endl;
 	try
 	{
+		b[0] = 1;
+		b[1] = 2;
+		b[2] = 3;
 		std::cout << b[0] << std::endl;
 	}
 	catch(const std::exception& e)
