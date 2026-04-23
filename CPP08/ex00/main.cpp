@@ -13,11 +13,13 @@ int	main()
 	v.push_back(3);
 	v.push_back(7);
 	v.push_back(42);
+	v.push_back(7);
 
 	try
 	{
 		std::vector<int>::iterator it = easyfind(v, 7);
 		std::cout << *it << std::endl;
+		std::cout << "Index: " << (it - v.begin()) << std::endl;
 	}
 	catch(const std::exception& e)
 	{
