@@ -3,12 +3,23 @@
 
 int	main(int argc, char** argv)
 {
-	if (argc == 2)
+	if (argc != 2)
 	{
-		BitcoinExchange	BE;
-		BE.run(argv[1]);
-	}
-	else
 		std::cout << "Error: could not open file." << std::endl;
+		return (1);
+	}
+
+	try
+	{
+		BitcoinExchange	exchange;
+		exchange.loadDatabase("data.csv");
+		exchange.processInputFile(argv[1]);
+	}
+	catch(const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return (1);
+	}
+
 	return (0);
 }
