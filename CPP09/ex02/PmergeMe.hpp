@@ -4,7 +4,7 @@
 #include <vector>
 #include <deque>
 
-#include <cstdlib>
+#include <cstddef>
 
 class PmergeMe
 {
@@ -31,13 +31,15 @@ class PmergeMe
 		void	sortDeque(const std::vector<int>& input);
 
 		void	fordJohnsonVector(std::vector<Element>& sequence);
-		void	fordJohnsonDeque();
+		void	fordJohnsonDeque(std::deque<Element>& sequence);
 
-		void	insertPendingVector(std::vector<Element>& mainChain, const std::vector<ElementPair>& sortedPairs
+		void	insertPendingVector(std::vector<Element>& mainChain, const std::vector<ElementPair>& sortedPairs,
+									bool hasStraggler, const Element& straggler);
+		void	insertPendingDeque(std::deque<Element>& mainChain, const std::deque<ElementPair>& sortedPairs,
 									bool hasStraggler, const Element& straggler);
 
 		void	binaryInsertVector(std::vector<Element>& chain, const Element& element, size_t rightBound);
-
+		void	binaryInsertDeque(std::deque<Element>& chain, const Element& element, size_t rightBound);
 
 		std::vector<int>	parseArguments(int argc, char** argv);
 

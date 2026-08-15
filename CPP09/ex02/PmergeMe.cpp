@@ -1,6 +1,7 @@
 #include "PmergeMe.hpp"
 #include <iostream>
 #include <stdexcept>
+#include <cstdlib>
 #include <cerrno>
 #include <limits>
 #include <sys/time.h>
@@ -81,6 +82,27 @@ void	PmergeMe::printTimings() const
 
 void	PmergeMe::binaryInsertVector(std::vector<Element>& chain, const Element& element, size_t rightBound)
 {
+	if (rightBound > chain.size())
+		throw std::runtime_error("Internal error: invalid insertion bound.");
+	size_t	left = 0;
+	size_t	right = rightBound;
+
+	while (left < right)
+	{
+		size_t	middle = left + (right - left) / 2;
+		if (chain[middle].value < element.value)
+			left = middle + 1;
+		else
+			right = middle;
+	}
+	
+	chain.insert(chain.begin() + left, element);
+}
+
+void	PmergeMe::binaryInsertDeque(std::deque<Element>& chain, const Element& element, size_t rightBound)
+{
+	if (rightBound > chain.size())
+		throw std::runtime_error("Internal error: invalid insertion bound.");
 	size_t	left = 0;
 	size_t	right = rightBound;
 
@@ -136,6 +158,59 @@ void	PmergeMe::insertPendingVector(std::vector<Element>& mainChain, const std::v
 			else
 			{
 				binaryInsertVector(mainChain, straggler, mainChain.size());
+			}
+		}
+
+		if (currentJacobsthal >= pendingCount)
+			break;
+
+		size_t	nextJacobsthal = currentJacobsthal + 2 * previousJacobsthal;
+
+		previousJacobsthal = currentJacobsthal;
+		currentJacobsthal = nextJacobsthal;
+	}
+}
+
+void	PmergeMe::insertPendingDeque(std::deque<Element>& mainChain, const std::deque<ElementPair>& sortedPairs,
+										bool hasStraggler, const Element& straggler)
+{
+	size_t	pendingCount = sortedPairs.size();
+
+	if (hasStraggler)
+		++pendingCount;
+
+	size_t	previousJacobsthal = 1;
+	size_t	currentJacobsthal = 3;
+
+	while (previousJacobsthal < pendingCount)
+	{
+		size_t	upper = currentJacobsthal;
+
+		if (upper > pendingCount)
+			upper = pendingCount;
+
+		for (size_t pairIndex = upper; pairIndex > previousJacobsthal; --pairIndex)
+		{
+			if (pairIndex <= sortedPairs.size())
+			{
+				Element	pending = sortedPairs[pairIndex - 1].loser;
+				Element	partner = sortedPairs[pairIndex - 1].winner;
+
+				size_t	partnerPos = 0;
+
+				while (partnerPos < mainChain.size() && mainChain[partnerPos].id != partner.id)
+				{
+					++partnerPos;
+				}
+
+				if (partnerPos == mainChain.size())
+					throw std::runtime_error("Internal error: partner not found.");
+
+				binaryInsertDeque(mainChain, pending, partnerPos);
+			}
+			else
+			{
+				binaryInsertDeque(mainChain, straggler, mainChain.size());
 			}
 		}
 
@@ -218,8 +293,74 @@ void	PmergeMe::fordJohnsonVector(std::vector<Element>& sequence)
 	sequence = mainChain;
 }
 
-void	PmergeMe::fordJohnsonDeque()
-{}
+void	PmergeMe::fordJohnsonDeque(std::deque<Element>& sequence)
+{
+	if (sequence.size() <= 1)
+		return ;
+
+	std::deque<ElementPair>	pairs;
+	
+	bool	hasStraggler = false;
+	Element	straggler;
+
+	for (size_t i = 0; i + 1 < sequence.size(); i += 2)
+	{
+		ElementPair	pair;
+
+		if (sequence[i].value <= sequence[i + 1].value)
+		{
+			pair.loser = sequence[i];
+			pair.winner = sequence[i + 1];
+		}
+		else
+		{
+			pair.loser = sequence[i + 1];
+			pair.winner = sequence[i];
+		}
+
+		pairs.push_back(pair);
+	}
+
+	if (sequence.size() % 2 != 0)
+	{
+		hasStraggler = true;
+		straggler = sequence[sequence.size() - 1];
+	}
+
+	std::deque<Element>	winners;
+	
+	for (size_t i = 0; i < pairs.size(); i++)
+	{
+		winners.push_back(pairs[i].winner);
+	}
+
+	fordJohnsonDeque(winners);
+
+	std::deque<ElementPair>	sortedPairs;
+
+	for (size_t i = 0; i < winners.size(); i++)
+	{
+		for (size_t j = 0; j < pairs.size(); j++)
+		{
+			if (winners[i].id == pairs[j].winner.id)
+			{
+				sortedPairs.push_back(pairs[j]);
+				break ;
+			}
+		}
+	}
+
+	std::deque<Element>	mainChain;
+	mainChain.push_back(sortedPairs[0].loser);
+	for (size_t i = 0; i < sortedPairs.size(); i++)
+	{
+		mainChain.push_back(sortedPairs[i].winner);
+	}
+
+	insertPendingDeque(mainChain, sortedPairs, hasStraggler, straggler);
+
+	sequence = mainChain;
+}
 
 void	PmergeMe::sortVector(const std::vector<int>& input)
 {
@@ -262,12 +403,22 @@ void	PmergeMe::sortDeque(const std::vector<int>& input)
 
 	_deque.clear();
 
-	for (std::vector<int>::const_iterator it = input.begin(); it != input.end(); ++it)
+	std::deque<Element>	sequence;
+
+	for (size_t i = 0; i < input.size(); i++)
 	{
-		_deque.push_back(*it);
+		Element element;
+
+		element.value = input[i];
+		element.id = i;
+
+		sequence.push_back(element);
 	}
 
-	fordJohnsonDeque();
+	fordJohnsonDeque(sequence);
+	
+	for (size_t i = 0; i < sequence.size(); i++)
+		_deque.push_back(sequence[i].value);
 
 	gettimeofday(&end, NULL);
 
